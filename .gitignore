@@ -10,3 +10,5 @@
 # rspec failure tracking
 .rspec_status
 /vendor/bundle
+*.sqlite3
+/spec/dummy/tmp/
