@@ -4,6 +4,8 @@ require 'active_support/concern'
 require 'active_support/core_ext/module/delegation'
 require 'active_record'
 
+require_relative 'checker/dependent_checker'
+
 module DependentOptionChecker
   class Checker
     def initialize
