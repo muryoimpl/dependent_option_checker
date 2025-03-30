@@ -1,24 +1,44 @@
 # DependentOptionChecker
 
-TODO: Delete this and the text below, and describe your gem
+`dependent_option_checker` is a simple gem that provides a Rake task to detect missing `dependent` options in `has_many` / `has_one` associations in ActiveRecord models. It also helps identify missing `has_many` / `has_one` associations themselves.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dependent_option_checker`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Features
+
+- Detects associations lacking a dependent: ... option.
+- Identifies missing has_many / has_one associations.
+- Outputs the names of models and the specific missing configurations.
+- Allows excluding specific tables from the check via a YAML config file.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add dependent_option_checker
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install dependent_option_checker
 
 ## Usage
 
-TODO: Write usage instructions here
+Run the following command:
+
+```console
+bin/rails dependent_option_checker:check
+```
+
+If any missing configuration is detected, the task will output the corresponding model names and the details of what is missing.
+
+
+## Configuration
+
+You can create a `.dependent_option_checker.yml` file in your Rails root directory to exclude specific tables from the check:
+
+```yaml
+ignored_tables:
+  - schema_migrations
+  - ar_internal_metadata
+```
 
 ## Development
 
@@ -28,7 +48,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dependent_option_checker.
+Bug reports and pull requests are welcome on GitHub at https://github.com/muryoimpl/dependent_option_checker.
 
 ## License
 
