@@ -8,9 +8,9 @@ RSpec.describe DependentOptionChecker::Checker do
 
     context 'when config file does not exist' do
       it do
-        config = subject.instance_variable_get(:@config)[:ignored_tables]
+        config = subject.instance_variable_get(:@config)
 
-        expect(config).to match_array(
+        expect(config.ignored_tables).to match_array(
           %w[ar_internal_metadata schema_migrations]
         )
       end
@@ -22,12 +22,29 @@ RSpec.describe DependentOptionChecker::Checker do
       end
 
       it do
-        expect(subject.instance_variable_get(:@config)).to be_empty
+        config = subject.instance_variable_get(:@config)
+        expect(config).to be_a DependentOptionChecker::Configuration
+        expect(config.ignored_tables).to be_empty
       end
     end
   end
 
   describe '#execute' do
-    # TODO: implement tests
+    subject { described_class.new.execute }
+
+    it 'should return data which do not define the dependent option' do
+      data = subject.find { |r| r.table_name == 'organizations' }
+      expect(data.undeclared).to match_array %w[members]
+    end
+
+    it 'should return data which do not define has_one/has_many relation' do
+      data = subject.find { |r| r.table_name == 'accounts' }
+      expect(data.unspecified).to match_array %w[organizations]
+    end
+
+    it do
+      data = subject.select { |d| d.unspecified.empty? && d.undeclared.empty? }
+      expect(data).to be_empty
+    end
   end
 end
