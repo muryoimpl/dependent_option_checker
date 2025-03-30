@@ -31,8 +31,7 @@ module DependentOptionChecker
         specified = []
         unspecified = []
 
-        reflections = has_x_refletions(model)
-        reflections.each_value do |reflection|
+        has_x_refletions(model).each_value do |reflection|
           if DependentChecker.dependent_option_specified?(reflection.options)
             specified << reflection
           else
@@ -40,13 +39,12 @@ module DependentOptionChecker
           end
         end
 
-        #       attribute_id = target_attribute_name
-        #       tables_having_attribute = cache_table_attributes.select do |_, attributes|
-        #         attributes.include?(attribute_id)
-        #       end
-
-        #       relation_declaration_checker = RelationDeclarationChecker.new(model, @config, @cache_table_attributes)
-        #       relation_declaration_checker.execute
+        declaration_checker = RelationDeclarationChecker.new(
+          attribute_name: target_attribute_name,
+          table_cache: @cache_table_attributes
+        )
+        tables = declaration_checker.table_names_having_attribute
+        undeclared = tables - specified.map(&:plural_name)
       end
     end
 
@@ -62,6 +60,16 @@ module DependentOptionChecker
       @config[:ignored_tables]
     end
 
+    def load_model_files!
+      Rails.autoloads.main.eager_load_dir(Rails.root.join('app', 'models'))
+    end
+
+    def cache_table_attributes
+      @cache_table_attributes ||= application_table_models.each_with_object({}) do |klass, acc|
+        acc[klass.table_name] = klass.attribute_names
+      end
+    end
+
     def application_record_classes
       @application_record_classes ||= ::ApplicationRecord.descendants.filter(&:base_class?)
     end
@@ -72,28 +80,14 @@ module DependentOptionChecker
       end
     end
 
-    #   def application_tables
-    #     application_record_classes.map(&:table_name) - ignored_tables
-    #   end
-
-    def cache_table_attributes
-      @cache_table_attributes ||= application_table_models.each_with_object({}) do |klass, acc|
-        acc[klass.table_name] = klass.attribute_names
-      end
-    end
-
-    def load_model_files!
-      Rails.autoloads.main.eager_load_dir(Rails.root.join('app', 'models'))
-    end
-
-    def target_attribute_name
-      "#{model.table_name.singularize.undersocre}_id"
-    end
-
     def has_x_refletions(model)
       model.reflections.select do |reflection|
         TARGET_CLASSES.include?(reflection.class)
       end
+    end
+
+    def target_attribute_name
+      "#{model.table_name.singularize.undersocre}_id"
     end
   end
 end
