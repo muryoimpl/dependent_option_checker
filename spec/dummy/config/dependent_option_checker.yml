@@ -1,0 +1,6 @@
+ignored_tables:
+  - employees
+
+ignored_relations:
+  Organization:
+    - employees

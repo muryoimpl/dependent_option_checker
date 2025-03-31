@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe DependentOptionChecker::Checker::RelationDeclarationChecker do
   describe '#extract_undeclared_tables' do
-    subject { described_class.new(model:, table_cache:).extract_undeclared_tables }
+    subject { described_class.new(model:, table_cache:, ignored_relations:).extract_undeclared_tables }
 
     let(:model) do
       stub_const('Organization', Class.new do |_|
@@ -18,6 +18,7 @@ RSpec.describe DependentOptionChecker::Checker::RelationDeclarationChecker do
       end)
     end
     let(:reflections) { {} }
+    let(:ignored_relations) { nil }
 
     before do
       allow(model).to receive(:reflections).and_return(reflections)
@@ -54,6 +55,18 @@ RSpec.describe DependentOptionChecker::Checker::RelationDeclarationChecker do
           'organizations' => %w[id name]
         }
       end
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when there is/are table(s) having the "<model_name>_id" but it is in ignored_relations' do
+      let(:table_cache) do
+        {
+          'organizations' => %w[id name],
+          'departments' => %w[id name organization_id]
+        }
+      end
+      let(:ignored_relations) { %w[departments] }
 
       it { is_expected.to be_empty }
     end

@@ -1,3 +1,6 @@
 ignored_tables:
-  - schema_migrations
-  - ar_internal_metadata
+  # - users
+
+ignored_relations:
+  # Organization:
+  #   - employees # this is table name, not relation name

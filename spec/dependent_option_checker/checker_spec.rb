@@ -6,12 +6,20 @@ RSpec.describe DependentOptionChecker::Checker do
   describe '#initialize' do
     subject { described_class.new }
 
-    context 'when config file does not exist' do
+    context 'when config file exists' do
       it do
         config = subject.instance_variable_get(:@config)
 
         expect(config.ignored_tables).to match_array(
-          %w[ar_internal_metadata schema_migrations]
+          %w[employees]
+        )
+      end
+
+      it do
+        config = subject.instance_variable_get(:@config)
+
+        expect(config.ignored_relations).to match(
+          'Organization' => %w[employees]
         )
       end
     end

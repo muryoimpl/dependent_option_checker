@@ -19,6 +19,7 @@ gem 'dependent_option_checker'
 And then execute:
 ```console
 bundle install
+
 bin/rails g dependent_option_checker:install
 ```
 
@@ -37,12 +38,15 @@ If any missing configuration is detected, the task will output the corresponding
 
 ## Configuration
 
-You can create a `dependent_option_checker.yml` file in your Rails `config` directory to exclude specific tables from the check:
+You can create a `dependent_option_checker.yml` file in your Rails `config` directory to exclude specific tables and relations from the check:
 
 ```yaml
 ignored_tables:
-  - schema_migrations
-  - ar_internal_metadata
+  - users
+
+ignored_relations:
+  Organization:
+    - employees # alert: this is table name
 ```
 
 ## Development

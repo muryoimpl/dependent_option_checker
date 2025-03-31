@@ -1,3 +1,0 @@
-ignored_tables:
-  - schema_migrations
-  - ar_internal_metadata

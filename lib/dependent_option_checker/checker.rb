@@ -47,7 +47,11 @@ module DependentOptionChecker
     end
 
     def relation_declaration_checker(model)
-      RelationDeclarationChecker.new(model:, table_cache: model_loader.cache_table_attributes)
+      RelationDeclarationChecker.new(
+        model:,
+        table_cache: model_loader.cache_table_attributes,
+        ignored_relations: @config.ignored_relations[model.name]
+      )
     end
 
     def result

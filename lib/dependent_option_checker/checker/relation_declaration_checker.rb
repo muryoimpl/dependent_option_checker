@@ -6,14 +6,15 @@ require 'active_support/core_ext/string'
 module DependentOptionChecker
   class Checker
     class RelationDeclarationChecker
-      def initialize(model:, table_cache:)
+      def initialize(model:, table_cache:, ignored_relations:)
         @model = model
         @table_cache = table_cache
+        @ignored_relations = ignored_relations || []
       end
 
       def extract_undeclared_tables
         tables = table_names_having_attribute
-        tables - relation_table_names
+        tables - relation_table_names - @ignored_relations
       end
 
       private
