@@ -11,13 +11,18 @@
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Add this line to your application's Gemfile:
+```ruby
+gem 'dependent_option_checker'
+```
 
-    $ bundle add dependent_option_checker
+And then execute:
+```console
+bundle install
+bin/rails g dependent_option_checker:install
+```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install dependent_option_checker
+This will generate a configuration file at config/dependent_option_checker.yml, which you can edit to specify tables to ignore during checks.
 
 ## Usage
 
