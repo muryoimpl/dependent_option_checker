@@ -32,7 +32,7 @@ If any missing configuration is detected, the task will output the corresponding
 
 ## Configuration
 
-You can create a `.dependent_option_checker.yml` file in your Rails root directory to exclude specific tables from the check:
+You can create a `dependent_option_checker.yml` file in your Rails `config` directory to exclude specific tables from the check:
 
 ```yaml
 ignored_tables:
