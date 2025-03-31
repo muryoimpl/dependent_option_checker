@@ -25,5 +25,9 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Prepare database
+      run: |
+        cd spec/dummy
+        bin/rails db:create db:migrate RAILS_ENV=test
+    - name: Run specs
+      run: bundle exec rake spec

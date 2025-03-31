@@ -5,7 +5,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative 'dummy/config/environment'
 
 ActiveRecord::Migrator.migrations_paths = [File.expand_path('./dummy/db/migrate', __dir__)]
-require 'rails/test_help'
+# require 'rails/test_help'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
