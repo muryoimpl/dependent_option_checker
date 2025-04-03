@@ -12,7 +12,7 @@ namespace :dependent_option_checker do
       puts
 
       data.each do |d|
-        puts "# Model: \e[32m#{d.table_name.classify}\e[0m"
+        puts "# \e[32m#{d.model_name} (table: #{d.table_name})\e[0m"
 
         puts '  * dependent option omission' if d.unspecified.size.positive?
         d.unspecified.each do |relation_name|

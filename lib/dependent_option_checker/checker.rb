@@ -32,7 +32,7 @@ module DependentOptionChecker
 
         next if unspecified.empty? && undeclared.empty?
 
-        acc << result.new(table_name: model.table_name, unspecified:, undeclared:)
+        acc << result.new(model_name: model.name, table_name: model.table_name, unspecified:, undeclared:)
       end
     end
 
@@ -55,7 +55,7 @@ module DependentOptionChecker
     end
 
     def result
-      @result ||= Data.define(:table_name, :unspecified, :undeclared)
+      @result ||= Data.define(:model_name, :table_name, :unspecified, :undeclared)
     end
   end
 end
