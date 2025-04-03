@@ -27,16 +27,26 @@ module DependentOptionChecker
       model_loader.load_table_attributes
 
       model_loader.application_record_classes.each_with_object([]) do |model, acc|
-        unspecified = dependent_checker(model).extract_unspecified_relations
-        undeclared = relation_declaration_checker(model).extract_undeclared_tables
+        unspecified, undeclared = extract_issues(model)
 
-        next if unspecified.empty? && undeclared.empty?
+        next if issue_empty?(unspecified, undeclared)
 
         acc << result.new(model_name: model.name, table_name: model.table_name, unspecified:, undeclared:)
       end
     end
 
     private
+
+    def extract_issues(model)
+      unspecified = dependent_checker(model).extract_unspecified_relations
+      undeclared = relation_declaration_checker(model).extract_undeclared_tables
+
+      [unspecified, undeclared]
+    end
+
+    def issue_empty?(unspecified, undeclared)
+      unspecified.empty? && undeclared.empty?
+    end
 
     def model_loader
       @model_loader ||= ModelLoader.new(@config)
